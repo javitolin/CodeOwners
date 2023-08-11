@@ -1,5 +1,6 @@
 ﻿using CodeOwners.IO.CodeOwnerFinder;
 using CodeOwners.IO.Git;
+using CodeOwners.IO.Notifier;
 using CodeOwners.IO.Parser;
 using CodeOwners.IO.PullRequests;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,8 @@ namespace CodeOwners
                 .AddSingleton<ICodeOwnersParser, CodeOwnersParser>()
                 .AddSingleton<ICodeOwnersFinder, CodeOwnersFinder>()
                 .AddSingleton<IPullRequestsDiscover, AdoPullRequestsDiscover>()
+                .AddSingleton<INotifier, RocketChatNotifier>()
+                .AddHttpClient()
                 .BuildServiceProvider();
 
             var logger = serviceProvider.GetService<ILoggerFactory>()?

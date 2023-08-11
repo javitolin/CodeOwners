@@ -1,6 +1,7 @@
 ﻿using CodeOwners.Entities;
 using CodeOwners.IO.CodeOwnerFinder;
 using CodeOwners.IO.Git;
+using CodeOwners.IO.Notifier;
 using CodeOwners.IO.Parser;
 using CodeOwners.IO.PullRequests;
 
@@ -12,14 +13,16 @@ namespace CodeOwners
         IGitHelper _gitHelper;
         ICodeOwnersParser _codeOwnersParser;
         ICodeOwnersFinder _codeOwnersFinder;
+        INotifier _notifier;
 
-        public Worker(IPullRequestsDiscover pRDiscover, IGitHelper gitHelper, ICodeOwnersParser codeOwnersParser, ICodeOwnersFinder codeOwnerFinder)
+        public Worker(IPullRequestsDiscover pRDiscover, IGitHelper gitHelper, ICodeOwnersParser codeOwnersParser, ICodeOwnersFinder codeOwnerFinder, INotifier notifier)
         {
             _pullRequestsDiscoverer = pRDiscover;
             _gitHelper = gitHelper;
             _codeOwnersParser = codeOwnersParser;
             _codeOwnersFinder = codeOwnerFinder;
-            //_notifyOwner = notifyOwner;
+            _notifier = notifier;
+            
         }
 
         public async Task RunAsync(CancellationToken cancellationToken)
@@ -47,7 +50,8 @@ namespace CodeOwners
                 var ownersToNotify = _codeOwnersFinder.FindOwners(codeOwnerMap, changes);
 
                 // Set owners as reviewers and notify them
-                await _pullRequestsDiscoverer.SetReviewersAsync(pullRequest, ownersToNotify, cancellationToken);
+                var addedOwners = await _pullRequestsDiscoverer.SetReviewersAsync(pullRequest, ownersToNotify, cancellationToken);
+                await _notifier.NotifyAsync(pullRequest, addedOwners, cancellationToken);
             }
         }
     }

@@ -4,6 +4,6 @@ namespace CodeOwners.IO.Notifier
 {
     public interface INotifier
     {
-        void Notify(OwnerChangedFiles ownerChangedFiles, string message);
+        Task NotifyAsync(PR pullRequest, IEnumerable<string> usersToNotify, CancellationToken cancellationToken);
     }
 }

@@ -72,7 +72,8 @@ namespace CodeOwners.IO.PullRequests
                 Repository = _useSshUrl ? repository.SshUrl : repository.WebUrl,
                 DestinationBranch = pullRequest.TargetRefName.Replace(BRANCH_DEFAULT_REMOVE, ""),
                 SourceBranch = pullRequest.SourceRefName.Replace(BRANCH_DEFAULT_REMOVE, ""),
-                Reviewers = reviewers
+                Reviewers = reviewers,
+                Url = pullRequest.Url
             };
         }
 

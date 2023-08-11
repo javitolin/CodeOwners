@@ -3,6 +3,7 @@
     public class PR
     {
         public string Name { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
         public string Repository { get; set; } = string.Empty;
         public string SourceBranch { get; set; } = string.Empty;
         public string DestinationBranch { get; set; } = string.Empty;
