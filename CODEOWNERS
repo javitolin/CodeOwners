@@ -1,0 +1,5 @@
+# CODEOWNER example
+
+* @project_owner
+
+service_1/ @service_1_owner
