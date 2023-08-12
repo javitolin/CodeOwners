@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+  codeowners:
+    image: codeowners
+    volumes:
+      - ./CodeOwners.Main/appsettings.json:/App/appsettings.json
+      - ./CodeOwners.Main/appsettings.Development.json:/App/appsettings.Development.json
+      - .id_rsa:/home/root/.ssh/id_rsa
+    build:
+      dockerfile: Dockerfile
+      tags:
+        - codeowners

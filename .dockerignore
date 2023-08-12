@@ -1,0 +1,12 @@
+.vs/
+bin/
+obj/
+**/bin/
+**/obj/
+**/*.json
+*Dockerfile
+*.yml
+LICENSE.txt
+Readme.md
+CODEOWNERS
+id_rsa

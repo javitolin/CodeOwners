@@ -47,6 +47,17 @@ service_1/ @service_1_owner
     * {pr_source_branch}: PullRequest Source branch
     * {pr_repository}: PullRequest repository
 
+## Permissions
+### Azure DevOps
+* Create a PAT (Personal Access Token) with the following permissions:
+    * Code: Read & Write
+    * Graph: Read
+    * Identity: Read
+
+### RocketChat
+* Create a user (or use an existing one)
+* Should have at least "user" permission (no need for bot/app)
+
 ## Contributing
 1. Fork it (<https://github.com/javitolin/CodeOwners/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
