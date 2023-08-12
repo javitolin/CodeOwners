@@ -8,7 +8,7 @@ using System.Net.Http.Json;
 
 namespace CodeOwners.IO.Notifier
 {
-    public class RocketChatNotifier : INotifier
+    public class RocketChatNotifier : ANotifier
     {
         private HttpClient _httpClient;
         private ILogger<RocketChatNotifier> _logger;
@@ -18,22 +18,20 @@ namespace CodeOwners.IO.Notifier
         string? _loginUrl;
         string? _listUsersUrl;
         string? _sendMessageUrl;
-        string? _messageFormat;
 
         public RocketChatNotifier(ILogger<RocketChatNotifier> logger, IConfiguration configuration,
-            HttpClient httpClient)
+            HttpClient httpClient) : base(logger, configuration)
         {
             _httpClient = httpClient;
             _logger = logger;
 
-            var section = configuration.GetSection("rocketchat");
+            var section = configuration.GetSection("notifiers").GetSection("rocketchat");
             _baseUrl = section.GetValue<string>("base_url");
             _username = section.GetValue<string>("username");
             _password = section.GetValue<string>("password");
             _loginUrl = section.GetValue<string>("login_url");
             _listUsersUrl = section.GetValue<string>("list_users_url");
             _sendMessageUrl = section.GetValue<string>("send_message_url");
-            _messageFormat = section.GetValue<string>("message_format");
             CheckConfiguration();
 
             _httpClient.BaseAddress = new Uri(_baseUrl!);
@@ -54,11 +52,6 @@ namespace CodeOwners.IO.Notifier
             if (string.IsNullOrWhiteSpace(_password))
             {
                 throw new ArgumentNullException(nameof(_password));
-            }
-
-            if (string.IsNullOrWhiteSpace(_messageFormat))
-            {
-                throw new ArgumentNullException(nameof(_messageFormat));
             }
         }
 
@@ -115,7 +108,7 @@ namespace CodeOwners.IO.Notifier
             return responseJson;
         }
 
-        public async Task NotifyAsync(PR pullRequest, IEnumerable<string> usersToNotify, CancellationToken cancellationToken)
+        public override async Task NotifyAsync(PR pullRequest, IEnumerable<string> usersToNotify, CancellationToken cancellationToken)
         {
             _logger.LogDebug($"Notifying users [{string.Join(",", usersToNotify)}] about PR [{pullRequest.Name}]");
 
@@ -156,23 +149,6 @@ namespace CodeOwners.IO.Notifier
                     response.EnsureSuccessStatusCode();
                 }
             }
-        }
-
-        private string FormatMessage(PR pullRequest, string user)
-        {
-            _messageFormat = _messageFormat!.Replace("{username}", user);
-            _messageFormat = _messageFormat.Replace("{pr_url}", pullRequest.Url);
-            _messageFormat = _messageFormat.Replace("{pr_name}", pullRequest.Name);
-            _messageFormat = _messageFormat.Replace("{pr_description}", pullRequest.Description);
-            _messageFormat = _messageFormat.Replace("{pr_id}", pullRequest.Id.ToString());
-            _messageFormat = _messageFormat.Replace("{pr_reviewers}", string.Join(", ", pullRequest.Reviewers));
-            _messageFormat = _messageFormat.Replace("{pr_destination_branch}", pullRequest.DestinationBranch);
-            _messageFormat = _messageFormat.Replace("{pr_source_branch}", pullRequest.SourceBranch);
-            _messageFormat = _messageFormat.Replace("{pr_repository}", pullRequest.Repository);
-
-            _logger.LogDebug($"Formatting message: [{_messageFormat}]");
-
-            return _messageFormat;
         }
     }
 }

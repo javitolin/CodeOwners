@@ -35,6 +35,18 @@ service_1/ @service_1_owner
 * Notifications:
     * RocketChat
 
+## Notifier Message Format
+* Can use any of these:
+    * {username}: RocketChat username
+    * {pr_url}: PullRequest URL
+    * {pr_name}: PullRequest Name
+    * {pr_description}: PullRequest Description
+    * {pr_id}: PullRequest unique id
+    * {pr_reviewers}: List of reviewers, separated by comma
+    * {pr_destination_branch}: PullRequest Destionation branch
+    * {pr_source_branch}: PullRequest Source branch
+    * {pr_repository}: PullRequest repository
+
 ## Contributing
 1. Fork it (<https://github.com/javitolin/CodeOwners/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)

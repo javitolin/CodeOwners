@@ -16,9 +16,9 @@ namespace CodeOwners
         IGitHelper _gitHelper;
         ICodeOwnersParser _codeOwnersParser;
         ICodeOwnersFinder _codeOwnersFinder;
-        INotifier _notifier;
+        ANotifier _notifier;
 
-        public Worker(ILogger<Worker> logger, IPullRequestsDiscover pRDiscover, IGitHelper gitHelper, ICodeOwnersParser codeOwnersParser, ICodeOwnersFinder codeOwnerFinder, INotifier notifier)
+        public Worker(ILogger<Worker> logger, IPullRequestsDiscover pRDiscover, IGitHelper gitHelper, ICodeOwnersParser codeOwnersParser, ICodeOwnersFinder codeOwnerFinder, ANotifier notifier)
         {
             _logger = logger;
             _pullRequestsDiscoverer = pRDiscover;

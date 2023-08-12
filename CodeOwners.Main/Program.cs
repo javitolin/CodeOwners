@@ -33,7 +33,7 @@ namespace CodeOwners
                 .AddSingleton<ICodeOwnersParser, CodeOwnersParser>()
                 .AddSingleton<ICodeOwnersFinder, CodeOwnersFinder>()
                 .AddSingleton<IPullRequestsDiscover, AdoPullRequestsDiscover>()
-                .AddSingleton<INotifier, RocketChatNotifier>()
+                .AddSingleton<ANotifier, RocketChatNotifier>()
                 .AddHttpClient()
                 .BuildServiceProvider();
 
