@@ -25,7 +25,7 @@ namespace CodeOwners
                 {
                     loggerBuilder.ClearProviders()
                         .AddFilter("*", LogLevel.Debug)
-                        .AddJsonConsole();
+                        .AddConsole();
                 })
                 .AddSingleton(configuration)
                 .AddSingleton<IWorker, Worker>()
