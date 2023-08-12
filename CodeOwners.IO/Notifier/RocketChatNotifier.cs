@@ -20,7 +20,7 @@ namespace CodeOwners.IO.Notifier
         string? _sendMessageUrl;
         string? _messageFormat;
 
-        public RocketChatNotifier(ILogger<RocketChatNotifier> logger, IConfiguration configuration, 
+        public RocketChatNotifier(ILogger<RocketChatNotifier> logger, IConfiguration configuration,
             HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -138,18 +138,24 @@ namespace CodeOwners.IO.Notifier
             JObject responseJson = await ParseResponse(response);
 
             var numberOfUsers = TryGetParameter<int>(responseJson, "count");
-            var users = TryGetParameter<JObject>(responseJson, "users");
+            var users = TryGetParameter<JArray>(responseJson, "users");
 
             await SendMessageToUsersAsync(pullRequest, usersToNotify, numberOfUsers, users, cancellationToken);
             _logger.LogDebug("Users notified");
         }
 
-        private async Task SendMessageToUsersAsync(PR pullRequest, IEnumerable<string> usersToNotify, int numberOfUsers, JObject users, CancellationToken cancellationToken)
+        private async Task SendMessageToUsersAsync(PR pullRequest, IEnumerable<string> usersToNotify, int numberOfUsers, JArray users, CancellationToken cancellationToken)
         {
             for (int i = 0; i < numberOfUsers; i++)
             {
-                var user = TryGetParameter<JObject>(users, i);
-                var username = TryGetParameter<string>(user, "username");
+                var user = users[i];
+                if (user is null || user["username"] is null)
+                {
+                    _logger.LogError($"User is null or doesn't contain field 'username'. User: [{user}]");
+                    continue;
+                }
+
+                var username = user["username"]!.Value<string>();
                 if (usersToNotify.Contains(username.ToLower()))
                 {
                     var response = await _httpClient.PostAsync(_sendMessageUrl, JsonContent.Create(new

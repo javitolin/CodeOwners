@@ -24,7 +24,8 @@ namespace CodeOwners.IO.PullRequests
         private short _reviewerDefaultVote;
         private ILogger<AdoPullRequestsDiscover> _logger;
 
-        public AdoPullRequestsDiscover(ILogger<AdoPullRequestsDiscover> logger, IConfiguration configuration)
+        public AdoPullRequestsDiscover(ILogger<AdoPullRequestsDiscover> logger, 
+            IConfiguration configuration)
         {
             _logger = logger;
 

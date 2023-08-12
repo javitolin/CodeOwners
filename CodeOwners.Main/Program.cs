@@ -21,7 +21,12 @@ namespace CodeOwners
                 .Build();
 
             var serviceProvider = new ServiceCollection()
-                .AddLogging()
+                .AddLogging(loggerBuilder =>
+                {
+                    loggerBuilder.ClearProviders()
+                        .AddFilter("*", LogLevel.Debug)
+                        .AddJsonConsole();
+                })
                 .AddSingleton(configuration)
                 .AddSingleton<IWorker, Worker>()
                 .AddSingleton<IGitHelper, GitHelper>()
