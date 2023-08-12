@@ -4,17 +4,45 @@
 * Specially helpful for MonoRepo microservice based system
 
 ## Process
-* Get all opened PRs
-* `git pull` the destination branch
-* Parse the CODEOWNERS file (from DESTINATION branch)
-* `git pull` the source branch
-* Find changes between source and destination branches
-* Find code owners for the changes and add them to the PR as revieweres
-    * If added, send them a Rocket.Chat message
+1. Get all opened PRs
+1. `git pull` the destination branch
+1. Parse the CODEOWNERS file (from DESTINATION branch)
+1. `git pull` the source branch
+1. Find changes between source and destination branches
+1. Find code owners for the changes and add them to the PR as revieweres
+    * If added, send them a notification
 
 ## CODEOWNER file
 * Very much like GitHub's CODEOWNER file
-* Should be placed in the root of your repo, called CODEOWNERS
+* Should be placed in the root of your repo, file name: CODEOWNERS
 * You can use "#" for comments
 * Order of the items is important, last one wins
-* Can use "*" for wildcards
+* Use "*" followed by usernames for "default owners"
+
+### CODEOWNER example:
+```
+# Default codeowner for the project
+* @project_owner
+
+# Specific owner for changes on "service_1/" directory (and everything inside)
+service_1/ @service_1_owner
+```
+
+## Currently implemented
+* Pull Request source:
+    * Azure DevOps
+
+* Notifications:
+    * RocketChat
+
+## Contributing
+1. Fork it (<https://github.com/javitolin/CodeOwners/fork>)
+2. Create your feature branch (`git checkout -b feature/fooBar`)
+3. Commit your changes (`git commit -am 'Add some fooBar'`)
+4. Push to the branch (`git push origin feature/fooBar`)
+5. Create a new Pull Request
+
+## Meta
+* [AsadoDevCulture](https://AsadoDevCulture.com) 
+* [@jdorfsman](https://twitter.com/jdorfsman)
+* Distributed under the MIT license.
