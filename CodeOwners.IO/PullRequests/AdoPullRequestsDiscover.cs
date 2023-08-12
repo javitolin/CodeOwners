@@ -19,7 +19,6 @@ namespace CodeOwners.IO.PullRequests
         private string? _projectName;
         private string? _repoName;
         private bool _useSshUrl;
-        private string? _pullRequestLinkTemplate;
         private string? _branchPrefixRemove;
         private short _reviewerDefaultVote;
         private ILogger<AdoPullRequestsDiscover> _logger;
@@ -44,7 +43,6 @@ namespace CodeOwners.IO.PullRequests
             _useSshUrl = adoSection.GetValue<bool>("use_ssh_url");
 
             var pullRequestInfoSection = adoSection.GetSection("pr_info");
-            _pullRequestLinkTemplate = pullRequestInfoSection.GetValue<string>("pr_url_format");
             _branchPrefixRemove = pullRequestInfoSection.GetValue<string>("branch_prefix_remove");
             _reviewerDefaultVote = pullRequestInfoSection.GetValue<short>("reviewer_default_vote");
 
@@ -93,7 +91,7 @@ namespace CodeOwners.IO.PullRequests
                 DestinationBranch = pullRequest.TargetRefName.Replace(_branchPrefixRemove, ""),
                 SourceBranch = pullRequest.SourceRefName.Replace(_branchPrefixRemove, ""),
                 Reviewers = reviewers,
-                Url = _pullRequestLinkTemplate is null ? pullRequest.Url : _pullRequestLinkTemplate.Replace("{pull_request_id}", $"{pullRequest.PullRequestId}")
+                Url = pullRequest.Url
             };
 
             _logger.LogDebug($"Pull request parsed: [{parsePullRequest}]");

@@ -102,17 +102,6 @@ namespace CodeOwners.IO.Notifier
             return responseJson![parameterToFind]!.Value<T>();
         }
 
-        private T TryGetParameter<T>(JObject responseJson, int indexToFind)
-        {
-            if (responseJson[indexToFind] is null)
-            {
-                _logger.LogError($"Couldn't find index '{indexToFind}' in response: [{responseJson}]");
-                throw new Exception("Missing index '{parameterToFind}' in response");
-            }
-
-            return responseJson![indexToFind]!.Value<T>();
-        }
-
         private static async Task<JObject> ParseResponse(HttpResponseMessage response)
         {
             response.EnsureSuccessStatusCode();
@@ -174,6 +163,12 @@ namespace CodeOwners.IO.Notifier
             _messageFormat = _messageFormat!.Replace("{username}", user);
             _messageFormat = _messageFormat.Replace("{pr_url}", pullRequest.Url);
             _messageFormat = _messageFormat.Replace("{pr_name}", pullRequest.Name);
+            _messageFormat = _messageFormat.Replace("{pr_description}", pullRequest.Description);
+            _messageFormat = _messageFormat.Replace("{pr_id}", pullRequest.Id.ToString());
+            _messageFormat = _messageFormat.Replace("{pr_reviewers}", string.Join(", ", pullRequest.Reviewers));
+            _messageFormat = _messageFormat.Replace("{pr_destination_branch}", pullRequest.DestinationBranch);
+            _messageFormat = _messageFormat.Replace("{pr_source_branch}", pullRequest.SourceBranch);
+            _messageFormat = _messageFormat.Replace("{pr_repository}", pullRequest.Repository);
 
             _logger.LogDebug($"Formatting message: [{_messageFormat}]");
 
