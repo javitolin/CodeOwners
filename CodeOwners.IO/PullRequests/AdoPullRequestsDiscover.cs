@@ -19,7 +19,7 @@ namespace CodeOwners.IO.PullRequests
         private string? _projectName;
         private string? _repoName;
         private bool _useSshUrl;
-        private string? _branchPrefixRemove;
+        private string _branchPrefixRemove;
         private short _reviewerDefaultVote;
         private ILogger<AdoPullRequestsDiscover> _logger;
 
@@ -35,15 +35,22 @@ namespace CodeOwners.IO.PullRequests
             var pat = adoSection.GetValue<string>("pat");
             if (collectionUri is null || pat is null)
             {
-                _logger.LogError("'collection_url' or 'pat' is missing from the configuration");
+                _logger.LogError("'collection_url' or 'pat' is missing from the 'ado' configuration");
                 throw new ArgumentException();
-            } 
+            }
+
             _projectName = adoSection.GetValue<string>("project_name");
             _repoName = adoSection.GetValue<string>("repo_name");
             _useSshUrl = adoSection.GetValue<bool>("use_ssh_url");
 
+            if (_projectName is null || _repoName is null)
+            {
+                _logger.LogError("'_projectName' or '_repoName' is missing from the 'ado' configuration");
+                throw new ArgumentException();
+            }
+
             var pullRequestInfoSection = adoSection.GetSection("pr_info");
-            _branchPrefixRemove = pullRequestInfoSection.GetValue<string>("branch_prefix_remove");
+            _branchPrefixRemove = pullRequestInfoSection.GetValue<string>("branch_prefix_remove") ?? string.Empty;
             _reviewerDefaultVote = pullRequestInfoSection.GetValue<short>("reviewer_default_vote");
 
             var creds = new VssBasicCredential(string.Empty, pat);

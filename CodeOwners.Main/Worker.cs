@@ -46,9 +46,12 @@ namespace CodeOwners
                 _gitHelper.Clone(tempDir, pullRequest.Repository, pullRequest.DestinationBranch);
 
                 // Parse CODEOWNERS file from destination branch
-                var codeownersFilename = Path.Combine(tempDir, Constants.CODEOWNERS_FILENAME);
-                _logger.LogInformation($"Parsing CodeOwners file [{codeownersFilename}]");
-                var codeOwnerMap = _codeOwnersParser.Parse(codeownersFilename);
+                _logger.LogInformation($"Parsing CodeOwners file");
+                var codeOwnerMap = _codeOwnersParser.Parse(tempDir);
+                if (codeOwnerMap is null)
+                {
+                    continue;
+                }
 
                 // Checkout the source branch from the pull request
                 _logger.LogInformation($"Checking out source branch [{pullRequest.SourceBranch}]");
