@@ -14,7 +14,7 @@
 
 ## CODEOWNER file
 * Very much like GitHub's CODEOWNER file
-* Should be placed in the root of your repo, file name: CODEOWNERS
+* Should be placed in the root of your repo, file name: CODEOWNERS (can be changed in the settings 'codeowners_filename')
 * You can use "#" for comments
 * Order of the items is important, last one wins
 * Use "*" followed by usernames for "default owners"
@@ -34,6 +34,9 @@ service_1/ @service_1_owner
 
 * Notifications:
     * RocketChat
+
+## Settings
+* Can use environment variables to override file 'appsettings.json'
 
 ## Notifier Message Format
 * Can use any of these:

@@ -18,7 +18,6 @@ namespace CodeOwners.IO.PullRequests
         private IdentityHttpClient _identityClient;
         private string? _projectName;
         private string? _repoName;
-        private bool _useSshUrl;
         private string _branchPrefixRemove;
         private short _reviewerDefaultVote;
         private ILogger<AdoPullRequestsDiscover> _logger;
@@ -41,7 +40,6 @@ namespace CodeOwners.IO.PullRequests
 
             _projectName = adoSection.GetValue<string>("project_name");
             _repoName = adoSection.GetValue<string>("repo_name");
-            _useSshUrl = adoSection.GetValue<bool>("use_ssh_url");
 
             if (_projectName is null || _repoName is null)
             {
@@ -94,7 +92,7 @@ namespace CodeOwners.IO.PullRequests
                 Id = pullRequest.PullRequestId,
                 Name = pullRequest.Title,
                 Description = pullRequest.Description,
-                Repository = _useSshUrl ? repository.SshUrl : repository.WebUrl,
+                Repository = repository.WebUrl,
                 DestinationBranch = pullRequest.TargetRefName.Replace(_branchPrefixRemove, ""),
                 SourceBranch = pullRequest.SourceRefName.Replace(_branchPrefixRemove, ""),
                 Reviewers = reviewers,
